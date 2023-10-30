@@ -1,5 +1,6 @@
 import React from 'react';
 import * as GlobalStyles from '../GlobalStyles.js';
+import * as GlobalVariables from '../config/GlobalVariableContext';
 import splashTimer from '../global-functions/splashTimer';
 import Breakpoints from '../utils/Breakpoints';
 import * as StyleSheet from '../utils/StyleSheet';
@@ -10,6 +11,8 @@ import { Text, useWindowDimensions } from 'react-native';
 const SplashScreen = props => {
   const dimensions = useWindowDimensions();
   const { theme, navigation } = props;
+  const Constants = GlobalVariables.useValues();
+  const Variables = Constants;
 
   const isFocused = useIsFocused();
   React.useEffect(() => {
@@ -19,7 +22,11 @@ const SplashScreen = props => {
           return;
         }
         const splashTimerResult = await splashTimer();
-        navigation.navigate('LoginScreen');
+        if (Constants['idToken'] === '') {
+          navigation.navigate('LoginNavigator', { screen: 'LoginScreen' });
+        } else {
+          navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+        }
       } catch (err) {
         console.error(err);
       }
@@ -30,7 +37,7 @@ const SplashScreen = props => {
   return (
     <ScreenContainer
       hasSafeArea={false}
-      hasTopSafeArea={false}
+      hasTopSafeArea={true}
       scrollable={false}
       style={StyleSheet.applyWidth(
         {
@@ -52,7 +59,7 @@ const SplashScreen = props => {
           dimensions.width
         )}
       >
-        {'TestApp'}
+        {'Splash'}
       </Text>
     </ScreenContainer>
   );

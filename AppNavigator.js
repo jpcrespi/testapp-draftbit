@@ -65,6 +65,56 @@ function Placeholder() {
     </View>
   );
 }
+function HomeNavigator() {
+  return (
+    <Stack.Navigator
+      initialRouteName="HomeScreen"
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: theme.colors['Custom Color'],
+          borderBottomColor: 'transparent',
+        },
+        headerTintColor: theme.colors['Surface'],
+        headerTitle: 'Home',
+        headerTitleAlign: 'center',
+      }}
+    >
+      <Stack.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        options={{
+          title: 'Home',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function LoginNavigator() {
+  return (
+    <Stack.Navigator
+      initialRouteName="LoginScreen"
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: theme.colors['Custom Color'],
+          borderBottomColor: 'transparent',
+        },
+        headerTintColor: theme.colors['Surface'],
+        headerTitle: 'Login',
+        headerTitleAlign: 'center',
+      }}
+    >
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{
+          title: 'Login',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 export default function RootAppNavigator() {
   return (
     <NavigationContainer linking={LinkingConfiguration}>
@@ -75,35 +125,21 @@ export default function RootAppNavigator() {
             backgroundColor: theme.colors['Custom Color'],
             borderBottomColor: 'transparent',
           },
+          headerShown: false,
           headerTintColor: theme.colors['Custom Color_2'],
           headerTitle: 'Login',
           headerTitleAlign: 'center',
         }}
       >
         <Stack.Screen
-          name="LoginScreen"
-          component={LoginScreen}
-          options={{
-            headerTitle: 'Login',
-            title: 'Login',
-          }}
-        />
-        <Stack.Screen
           name="SplashScreen"
           component={SplashScreen}
           options={{
-            headerShown: false,
             title: 'Splash',
           }}
         />
-        <Stack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-          options={{
-            headerTitle: 'Home',
-            title: 'Home',
-          }}
-        />
+        <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
+        <Stack.Screen name="LoginNavigator" component={LoginNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );
