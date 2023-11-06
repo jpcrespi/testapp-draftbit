@@ -1,6 +1,7 @@
 import React from 'react';
 import * as GlobalStyles from '../GlobalStyles.js';
 import * as GlobalVariables from '../config/GlobalVariableContext';
+import * as Utils from '../utils';
 import Breakpoints from '../utils/Breakpoints';
 import * as StyleSheet from '../utils/StyleSheet';
 import { Button, ScreenContainer, withTheme } from '@draftbit/ui';
@@ -8,10 +9,22 @@ import { Text, useWindowDimensions } from 'react-native';
 
 const HomeScreen = props => {
   const dimensions = useWindowDimensions();
-  const { theme, navigation } = props;
+  const { theme } = props;
   const Constants = GlobalVariables.useValues();
   const Variables = Constants;
   const setGlobalVariableValue = GlobalVariables.useSetValue();
+
+  const Destination = () => {
+    const { navigation } = props;
+    React.useEffect(() => {
+      if (destination.length > 0) {
+        navigation.replace(destination);
+      }
+    }, [navigation, destination]);
+    return <></>;
+  };
+
+  const [destination, setDestination] = React.useState('');
 
   return (
     <ScreenContainer
@@ -50,7 +63,7 @@ const HomeScreen = props => {
               key: 'email',
               value: '',
             });
-            navigation.navigate('LoginNavigator', { screen: 'LoginScreen' });
+            setDestination('LoginNavigator');
           } catch (err) {
             console.error(err);
           }
@@ -63,6 +76,9 @@ const HomeScreen = props => {
         )}
         title={'Logout'}
       />
+      <Utils.CustomCodeErrorBoundary>
+        <Destination />
+      </Utils.CustomCodeErrorBoundary>
     </ScreenContainer>
   );
 };

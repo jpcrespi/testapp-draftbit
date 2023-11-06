@@ -2,6 +2,7 @@ import React from 'react';
 import * as GlobalStyles from '../GlobalStyles.js';
 import * as FirebaseApi from '../apis/FirebaseApi.js';
 import * as GlobalVariables from '../config/GlobalVariableContext';
+import * as Utils from '../utils';
 import Breakpoints from '../utils/Breakpoints';
 import * as StyleSheet from '../utils/StyleSheet';
 import showAlertUtil from '../utils/showAlert';
@@ -15,13 +16,24 @@ import {
 
 const LoginScreen = props => {
   const dimensions = useWindowDimensions();
-  const { theme, navigation } = props;
+  const { theme } = props;
   const Constants = GlobalVariables.useValues();
   const Variables = Constants;
   const setGlobalVariableValue = GlobalVariables.useSetValue();
 
+  const Destination = () => {
+    const { navigation } = props;
+    React.useEffect(() => {
+      if (destination.length > 0) {
+        navigation.replace(destination);
+      }
+    }, [navigation, destination]);
+    return <></>;
+  };
+
   const firebaseAuthLoginPOST = FirebaseApi.useAuthLoginPOST();
 
+  const [destination, setDestination] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [textInput2Value, setTextInput2Value] = React.useState('');
   const [textInputValue, setTextInputValue] = React.useState('');
@@ -167,9 +179,7 @@ const LoginScreen = props => {
                         key: 'email',
                         value: authResponse?.email,
                       });
-                      navigation.navigate('HomeNavigator', {
-                        screen: 'HomeScreen',
-                      });
+                      setDestination('HomeNavigator');
                     }
                   } catch (err) {
                     console.error(err);
@@ -224,6 +234,9 @@ const LoginScreen = props => {
           </View>
         )}
       </>
+      <Utils.CustomCodeErrorBoundary>
+        <Destination />
+      </Utils.CustomCodeErrorBoundary>
     </ScreenContainer>
   );
 };

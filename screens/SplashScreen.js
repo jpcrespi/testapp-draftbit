@@ -1,18 +1,33 @@
 import React from 'react';
 import * as GlobalStyles from '../GlobalStyles.js';
 import * as GlobalVariables from '../config/GlobalVariableContext';
-import splashTimer from '../global-functions/splashTimer';
+import * as Utils from '../utils';
 import Breakpoints from '../utils/Breakpoints';
 import * as StyleSheet from '../utils/StyleSheet';
 import { ScreenContainer, withTheme } from '@draftbit/ui';
 import { useIsFocused } from '@react-navigation/native';
-import { Text, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, Text, useWindowDimensions } from 'react-native';
 
 const SplashScreen = props => {
   const dimensions = useWindowDimensions();
-  const { theme, navigation } = props;
+  const { theme } = props;
   const Constants = GlobalVariables.useValues();
   const Variables = Constants;
+
+  const Timer = async seconds => {
+    const timer = ms => new Promise(resolve => setTimeout(resolve, ms));
+    await timer(seconds * 1000);
+  };
+
+  const Destination = () => {
+    const { navigation } = props;
+    React.useEffect(() => {
+      if (destination.length > 0) {
+        navigation.replace(destination);
+      }
+    }, [navigation, destination]);
+    return <></>;
+  };
 
   const isFocused = useIsFocused();
   React.useEffect(() => {
@@ -21,11 +36,11 @@ const SplashScreen = props => {
         if (!isFocused) {
           return;
         }
-        const splashTimerResult = await splashTimer();
+        await Timer(3);
         if (Constants['idToken'] === '') {
-          navigation.navigate('LoginNavigator', { screen: 'LoginScreen' });
+          setDestination('LoginNavigator');
         } else {
-          navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+          setDestination('HomeNavigator');
         }
       } catch (err) {
         console.error(err);
@@ -33,6 +48,7 @@ const SplashScreen = props => {
     };
     handler();
   }, [isFocused]);
+  const [destination, setDestination] = React.useState('');
 
   return (
     <ScreenContainer
@@ -41,6 +57,7 @@ const SplashScreen = props => {
       scrollable={false}
       style={StyleSheet.applyWidth(
         {
+          alignItems: 'center',
           backgroundColor: theme.colors['Custom Color_2'],
           justifyContent: 'center',
         },
@@ -52,15 +69,26 @@ const SplashScreen = props => {
         allowFontScaling={true}
         style={StyleSheet.applyWidth(
           StyleSheet.compose(GlobalStyles.TextStyles(theme)['Text'], {
-            alignSelf: 'center',
             color: theme.colors['Surface'],
-            flex: 0,
+            marginBottom: 15,
           }),
           dimensions.width
         )}
       >
-        {'Splash'}
+        {'TestApp\n'}
       </Text>
+      <ActivityIndicator
+        animating={true}
+        hidesWhenStopped={true}
+        size={'small'}
+        style={StyleSheet.applyWidth(
+          GlobalStyles.ActivityIndicatorStyles(theme)['Activity Indicator'],
+          dimensions.width
+        )}
+      />
+      <Utils.CustomCodeErrorBoundary>
+        <Destination />
+      </Utils.CustomCodeErrorBoundary>
     </ScreenContainer>
   );
 };
