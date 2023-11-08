@@ -44,8 +44,9 @@ const LoginScreen = props => {
       scrollable={false}
       style={StyleSheet.applyWidth(
         {
-          alignItems: 'stretch',
+          alignItems: { minWidth: Breakpoints.Tablet, value: 'center' },
           backgroundColor: theme.colors['Custom Color_2'],
+          justifyContent: { minWidth: Breakpoints.Tablet, value: 'center' },
         },
         dimensions.width
       )}
@@ -65,6 +66,7 @@ const LoginScreen = props => {
                 paddingLeft: 20,
                 paddingRight: 20,
                 paddingTop: 20,
+                width: { minWidth: Breakpoints.Tablet, value: 400 },
               },
               dimensions.width
             )}
